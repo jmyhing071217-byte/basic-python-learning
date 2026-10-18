@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PYTHON LAB | 极简高阶交互式通关教程</title>
+  
+  <!-- 离线样式库 -->
+  <link rel="stylesheet" href="css/prism.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  
+  <!-- 离线 Tailwind CSS 运行时 -->
+  <script src="js/tailwind.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+            }
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-transparent text-slate-100 h-full h-screen h-[100dvh] flex flex-col antialiased selection:bg-sky-500 selection:text-white transition-colors duration-200 overflow-hidden">
+
+  <!-- 动态沉浸微粒星云背景视频 (Dynamic Particle Nebula Video Background) -->
+  <div class="video-bg-container">
+    <video id="bgVideo"
+           class="background-video"
+           autoplay
+           loop
+           muted
+           playsinline
+           preload="auto"
+           poster="images/video_frame_0.jpg">
+      <source src="images/background_video.mp4" type="video/mp4" />
+    </video>
+    <!-- 微光网格与渐变暗角遮罩 -->
+    <div class="video-overlay-scrim"></div>
+    <div class="aurora-grid"></div>
+  </div>
+
+  <!-- 庆典礼花微粒 Canvas (用于完成反馈粒子爆炸) -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- 滚轮切步惯性进度浮标 (已禁用切步，保持隐藏) -->
+  <div id="inertiaStepCue" class="inertia-step-cue hidden" style="display: none !important;">
+    <div class="inertia-cue-ring"></div>
+    <span id="inertiaCueText">继续滑动切换下一步 →</span>
+  </div>
+
+  <!-- 抽屉背景微光毛玻璃遮罩 (Smooth Backdrop Scrim) - 顶级 z-index 不受局部堆叠上下文限制 -->
+  <div id="sidebarOverlay" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-none"></div>
+
+  <!-- 1. 左侧章节目录大纲 (顶级 z-[70]，位于最顶层，彻底解决顶部被顶栏挡住的问题) -->
+  <aside id="sidebar" class="fixed top-0 bottom-0 left-0 z-[70] w-80 max-w-[85vw] bg-[#070b14]/95 border-r border-white/15 flex flex-col transform -translate-x-full transition-transform duration-300 ease-in-out shrink-0 backdrop-blur-3xl shadow-2xl">
+    
+    <!-- 抽屉头部与关闭按钮 -->
+    <div class="p-4 border-b border-white/10 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-sm font-extrabold text-white">📚 课程关卡大纲</span>
+        <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-400 font-bold border border-sky-500/30">15 章节</span>
+      </div>
+      <button id="closeSidebarBtn"
+              onclick="toggleSidebar(false, event)"
+              class="p-1 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition cursor-pointer"
+              title="收起大纲 (ESC 或 Ctrl+B)">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- 搜索过滤 -->
+    <div class="p-3 border-b border-white/10">
+      <div class="relative">
+        <svg class="w-3.5 h-3.5 text-sky-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input type="text"
+               id="searchInput"
+               placeholder="章节实时过滤..."
+               class="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl bg-white/10 text-white placeholder:text-slate-400 border border-white/15 focus:border-sky-500/50 outline-none transition backdrop-blur-md" />
+      </div>
+    </div>
+
+    <!-- 章节列表容器 -->
+    <div id="sidebarChapters" class="flex-1 overflow-y-auto p-2.5 space-y-1">
+      <!-- 由 js/app.js 动态渲染 -->
+    </div>
+
+    <!-- 底部操作栏 -->
+    <div class="p-3 border-t border-white/10 text-xs text-slate-300 bg-[#070a12]/60 flex items-center justify-between">
+      <span class="text-[11px] font-mono text-slate-300">按 ESC 或点击空白收起</span>
+      <button onclick="resetAllProgress()" class="text-[11px] text-slate-300 hover:text-rose-400 transition font-medium cursor-pointer">
+        重置进度
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- 1. 透明顶栏：融入背景，微光渐变 (Transparent Topbar) -->
+  <header class="sticky top-0 z-30 transparent-header shrink-0">
+    <div class="max-w-[1780px] mx-auto px-4 sm:px-6 h-15 flex items-center justify-between gap-4">
+      
+      <!-- 4. 图标配大标题：左上角放醒目标题与品牌标识 -->
+      <div class="flex items-center gap-3">
+        <!-- 章节大纲抽屉开关按钮 (Ctrl+B) -->
+        <button id="toggleSidebarBtn"
+                onclick="toggleSidebar(undefined, event)"
+                title="展开课程关卡大纲 (Ctrl+B)"
+                class="p-2 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white transition shadow-sm backdrop-blur-md cursor-pointer select-none active:scale-95">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+          </svg>
+        </button>
+
+        <div class="flex items-center gap-2.5 cursor-pointer" onclick="switchChapter('chap-1', 0)">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-amber-400 p-[1.5px] shadow-lg shadow-sky-500/20">
+            <div class="w-full h-full bg-[#090d16] rounded-[10px] flex items-center justify-center">
+              <svg class="w-4.5 h-4.5" viewBox="0 0 128 128">
+                <path fill="#38bdf8" d="M63.6 15.6c-24.9 0-23.4 10.8-23.4 10.8l.1 11.2h23.8v3.4H30.4S15.6 39.3 15.6 64.2c0 24.9 12.9 24.1 12.9 24.1h7.7v-10.8s-.4-12.9 12.7-12.9h21.9s12.2-.2 12.2-11.9V27.5s1.7-11.9-19.4-11.9zm-12.4 7.3c2.4 0 4.3 1.9 4.3 4.3s-1.9 4.3-4.3 4.3c-2.4 0-4.3-1.9-4.3-4.3s1.9-4.3 4.3-4.3z"/>
+                <path fill="#facc15" d="M64.4 112.4c24.9 0 23.4-10.8 23.4-10.8l-.1-11.2H63.9V87h33.7s14.8 1.7 14.8-23.2c0-24.9-12.9-24.1-12.9-24.1h-7.7v10.8s.4 12.9-12.7 12.9H47.1s-12.2.2-12.2 11.9v25.2s-1.7 11.9 19.4 11.9zm12.4-7.3c-2.4 0-4.3-1.9-4.3-4.3s1.9-4.3 4.3-4.3c2.4 0 4.3 1.9 4.3 4.3s-1.9 4.3-4.3 4.3z"/>
+              </svg>
+            </div>
+          </div>
+          <div>
+            <span class="font-black text-base tracking-tight gradient-text-hero">
+              PYTHON LAB
+            </span>
+            <span class="text-[10px] font-mono text-sky-400 font-bold ml-1 hidden sm:inline">v3.x</span>
+          </div>
+        </div>
+
+        <div class="h-4 w-[1px] bg-white/20 hidden sm:block mx-1"></div>
+
+        <!-- 当前章节动态标题 (图标配大标题) -->
+        <div id="topbarChapterTitle" class="flex items-center gap-2 min-w-0">
+          <!-- 由 js/app.js 动态填充当前大标题 -->
+        </div>
+      </div>
+
+      <!-- 中间：全局 Spotlight 搜索触发 -->
+      <div class="hidden xl:flex items-center flex-1 max-w-sm mx-4">
+        <button onclick="openCommandPalette()"
+                class="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/20 text-xs text-slate-200 hover:text-white transition backdrop-blur-md">
+          <div class="flex items-center gap-2">
+            <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span class="text-slate-200">搜索语法知识点...</span>
+          </div>
+          <span class="kbd-badge">Ctrl K</span>
+        </button>
+      </div>
+
+      <!-- 右侧：演练场开关与移动端切换 -->
+      <div class="flex items-center gap-2 pr-20 sm:pr-24">
+        <!-- 语言切换按钮 (Language Switcher: 中 / EN) -->
+        <button id="topbarLangBtn"
+                onclick="toggleLanguage()"
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition shadow-sm backdrop-blur-md cursor-pointer select-none active:scale-95"
+                title="切换中英双语 / Switch Language">
+          <span class="text-sm">🌐</span>
+          <span id="topbarLangText" class="font-bold">English</span>
+        </button>
+
+        <!-- 桌面/平板端代码演练场显隐开关 (支持快捷键 Ctrl+J) -->
+        <button id="togglePlaygroundBtn"
+                onclick="togglePlayground()"
+                class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-xs font-semibold text-white transition shadow-sm backdrop-blur-md cursor-pointer select-none"
+                title="切换代码演练场显示/隐藏 (快捷键: Ctrl+J)">
+          <span class="w-2 h-2 rounded-full bg-emerald-400" id="playgroundStatusDot"></span>
+          <span id="playgroundBtnText" class="text-white font-bold">💻 隐藏演练场</span>
+          <span class="kbd-badge text-[9px] ml-1">Ctrl J</span>
+        </button>
+
+        <!-- 移动端视窗切换 -->
+        <div class="lg:hidden flex items-center bg-white/40 dark:bg-slate-800/80 backdrop-blur-md p-0.5 rounded-xl text-xs font-bold">
+          <button id="tabBtnTutorial" onclick="switchTab('tutorial')" class="px-2.5 py-1 rounded-lg text-sky-500">
+            📖 教程
+          </button>
+          <button id="tabBtnPlayground" onclick="switchTab('playground')" class="px-2.5 py-1 rounded-lg text-slate-500">
+            💻 演练场
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- 2. 右侧悬浮玻璃竖轨菜单 (Right Floating Vertical Dock) -->
+  <aside id="rightRail" class="right-vertical-rail">
+    
+    <!-- 6. 侧边快捷操作：高频操作直接点，不跳转 -->
+    <div class="flex flex-col items-center gap-2 w-full px-2 pb-2">
+      <!-- 快捷操作 1: 运行代码 (脉冲高亮) -->
+      <div class="group relative flex justify-center w-full">
+        <button onclick="runPythonCode()"
+                title="运行代码 (Ctrl+Enter)"
+                class="rail-action-btn w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center shadow-lg shadow-sky-500/30 active:scale-95 cursor-pointer">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        <div class="rail-tooltip absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs font-bold whitespace-nowrap shadow-xl z-50">
+          ⚡ 运行代码 (Ctrl+Enter)
+        </div>
+      </div>
+
+      <!-- 快捷操作 2: 演练场显隐开关 (Ctrl+J) -->
+      <div class="group relative flex justify-center w-full">
+        <button onclick="togglePlayground()"
+                title="显示/隐藏代码演练场 (Ctrl+J)"
+                id="railPlaygroundBtn"
+                class="rail-action-btn w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer border border-white/20 backdrop-blur-md">
+          <span class="text-xs">💻</span>
+        </button>
+        <div class="rail-tooltip absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs font-bold whitespace-nowrap shadow-xl z-50">
+          💻 显隐演练场 (Ctrl+J)
+        </div>
+      </div>
+
+      <!-- 快捷操作 2: 全局检索 (Ctrl+K) -->
+      <div class="group relative flex justify-center w-full">
+        <button onclick="openCommandPalette()"
+                title="全局搜索 (Ctrl+K)"
+                class="rail-action-btn w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer border border-white/20 backdrop-blur-md">
+          <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+        <div class="rail-tooltip absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs font-bold whitespace-nowrap shadow-xl z-50">
+          🔍 全局检索 (Ctrl+K)
+        </div>
+      </div>
+
+      <!-- 快捷操作 3: 语法速查宝典 -->
+      <div class="group relative flex justify-center w-full">
+        <button onclick="toggleCheatSheet(true)"
+                title="语法速查手册"
+                class="rail-action-btn w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer border border-white/20 backdrop-blur-md">
+          <span class="text-xs">📖</span>
+        </button>
+        <div class="rail-tooltip absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs font-bold whitespace-nowrap shadow-xl z-50">
+          📖 语法速查宝典
+        </div>
+      </div>
+
+      <!-- 快捷操作 4: 语言切换 (Switch Language) -->
+      <div class="group relative flex justify-center w-full">
+        <button onclick="toggleLanguage()"
+                id="railLangBtn"
+                title="切换语言 / Switch Language"
+                class="rail-action-btn w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer border border-white/20 backdrop-blur-md active:scale-95">
+          <span class="text-xs font-bold font-mono text-sky-400" id="railLangIcon">EN</span>
+        </button>
+        <div class="rail-tooltip absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs font-bold whitespace-nowrap shadow-xl z-50" id="railLangTooltip">
+          🌐 切换为英文版 (Switch to English)
+        </div>
+      </div>
+
+      <!-- 快捷操作 5: 动态背景视频播放与效果切换 -->
+      <div class="group relative flex justify-center w-full">
+        <button onclick="toggleVideoPlayback()"
+                title="切换动态视频背景模式 (沉浸 / 柔和 / 暂停)"
+                class="rail-action-btn w-9 h-9 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 flex items-center justify-center cursor-pointer border border-cyan-500/30">
+          <span class="text-xs" id="videoPlayIcon">✨</span>
+        </button>
+        <div class="rail-tooltip absolute right-full mr-3 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs font-bold whitespace-nowrap shadow-xl z-50">
+          ✨ 动态背景微粒流光调节
+        </div>
+      </div>
+    </div>
+
+    <!-- 分隔线 -->
+    <div class="w-8 h-[1px] bg-slate-200 dark:bg-slate-800 my-1.5 shrink-0"></div>
+
+    <!-- 3. 竖轨章节列表 (默认只显图标，当前项展开文字带平滑过渡) + 5. 悬停提示 -->
+    <div id="railChapterIcons" class="flex-1 w-full flex flex-col items-center gap-1.5 overflow-y-auto px-1 py-1">
+      <!-- 由 js/app.js 动态渲染 15 个图标与当前项展开组件 -->
+    </div>
+
+    <!-- 分隔线 -->
+    <div class="w-8 h-[1px] bg-slate-200 dark:bg-slate-800 my-1.5 shrink-0"></div>
+
+    <!-- 竖轨底部：总体进度与重置 -->
+    <div class="group relative flex flex-col items-center justify-center w-full pt-1 shrink-0">
+      <div class="w-9 h-9 rounded-xl bg-white/10 border border-white/20 flex flex-col items-center justify-center cursor-pointer backdrop-blur-md"
+           onclick="resetAllProgress()"
+           title="点击重置学习进度">
+        <span id="railProgressText" class="font-mono text-[10px] font-bold text-sky-400">0%</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 neon-dot mt-0.5"></span>
+      </div>
+      <div class="rail-tooltip absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-bold whitespace-nowrap shadow-xl z-50">
+        <div id="railProgressCountText" class="text-white font-bold">0 / 15 关已掌握</div>
+        <div class="text-[10px] text-slate-300">点击可重置进度</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- 核心工作区 (Layout) - 右侧留出空间给悬浮竖轨 Dock，左侧全留给内容与演练场 -->
+  <div class="flex-1 min-h-0 w-full flex overflow-hidden relative z-10 pr-20 sm:pr-24">
+
+
+    <!-- 2. 中间卡片阅读舞台 (Focused Step-by-Step Card View) -->
+    <main id="tutorialView" class="flex-1 min-h-0 h-full overflow-y-auto px-4 sm:px-8 lg:px-12 py-7 min-w-0">
+      <div id="tutorialContentWrapper" class="max-w-3xl mx-auto transition-all duration-300 rubber-band-canvas">
+        <div id="chapterContent">
+          <!-- 动态渲染当前单一步骤 -->
+        </div>
+      </div>
+    </main>
+
+    <!-- 3. 右侧极客代码演练场 (Playground IDE) - 支持自由展开/隐藏与毛玻璃通透 -->
+    <aside id="playgroundView" class="playground-panel flex flex-col w-full lg:w-[460px] xl:w-[520px] 2xl:w-[580px] shrink-0 h-full transition-all duration-300 ease-in-out">
+      
+      <!-- 演练场顶部工具条 -->
+      <div class="px-4 py-2 border-b border-slate-200/80 dark:border-white/10 flex items-center justify-between gap-2 bg-white/40 dark:bg-black/30 backdrop-blur-xl">
+        <div class="flex items-center gap-2">
+          <!-- 移动端返回教程按钮 -->
+          <button onclick="switchTab('tutorial')" class="lg:hidden flex items-center gap-1 px-2.5 py-1 text-xs text-sky-400 font-bold bg-sky-500/10 hover:bg-sky-500/20 rounded-lg transition">
+            <span>← 返回教程</span>
+          </button>
+
+          <!-- Tab 模拟 -->
+          <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/45 dark:bg-white/10 border border-slate-200/80 dark:border-white/15 text-xs font-mono font-bold text-sky-500 dark:text-sky-400 shadow-sm backdrop-blur-md">
+            <span>🐍</span>
+            <span>main.py</span>
+          </div>
+          <span class="text-[10px] text-slate-400 font-mono hidden sm:inline">Skulpt JIT</span>
+        </div>
+
+        <div class="flex items-center gap-1.5">
+          <!-- 预设范例下拉 -->
+          <select id="snippetSelect"
+                  class="text-xs bg-white/45 dark:bg-slate-900/90 border border-slate-200/80 dark:border-white/15 rounded-lg px-2 py-1 text-slate-800 dark:text-slate-200 outline-none cursor-pointer focus:ring-1 focus:ring-sky-500 backdrop-blur-md">
+            <!-- 动态填充 -->
+          </select>
+
+          <!-- 清空代码按钮 -->
+          <button onclick="clearEditor()"
+                  title="清空当前代码"
+                  class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-white/10 transition cursor-pointer">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+
+          <!-- 桌面端隐藏/收起演练场按钮 -->
+          <button onclick="togglePlayground(false)"
+                  title="隐藏演练场 (按 Ctrl+J 或点击顶栏按钮可恢复展开)"
+                  class="p-1 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-200 dark:hover:bg-white/10 transition cursor-pointer">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- 编辑器主体 (含行号) -->
+      <div class="flex-1 flex flex-col min-h-[220px] max-h-[50%] bg-white/20 dark:bg-black/40 backdrop-blur-md overflow-hidden border-b border-slate-200/80 dark:border-white/10">
+        <div class="editor-wrapper flex-1 overflow-hidden">
+          <div id="lineNumbers" class="line-numbers font-mono select-none overflow-hidden"></div>
+          <textarea id="codeEditor"
+                    spellcheck="false"
+                    class="flex-1 p-3 bg-transparent text-slate-900 dark:text-slate-100 font-mono text-xs sm:text-[13px] resize-none focus:outline-none"
+                    placeholder="# 在此编写或修改 Python 代码..."></textarea>
+        </div>
+      </div>
+
+      <!-- 运行控制栏 -->
+      <div class="px-4 py-2 bg-slate-50/60 dark:bg-black/30 backdrop-blur-md border-b border-slate-200/80 dark:border-white/10 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <button id="runBtn"
+                  onclick="runPythonCode()"
+                  class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 hover:opacity-95 text-white font-bold text-xs transition shadow-lg shadow-sky-500/25 flex items-center gap-1.5 active:scale-95 cursor-pointer border border-white/20">
+            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+            </svg>
+            <span>运行代码</span>
+          </button>
+          <span class="text-[10px] text-slate-400 font-mono hidden sm:inline">Ctrl + Enter</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <div id="runStatus" class="text-xs font-mono">
+            <span class="text-slate-400">就绪</span>
+          </div>
+          <button onclick="clearTerminal()"
+                  class="text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 px-2 py-0.5 rounded hover:bg-slate-200 dark:hover:bg-white/10 transition cursor-pointer">
+            清空输出
+          </button>
+        </div>
+      </div>
+
+      <!-- 终端输出 Console -->
+      <div class="flex-1 flex flex-col bg-slate-50/40 dark:bg-black/60 backdrop-blur-md overflow-hidden">
+        <div class="px-3.5 py-1.5 bg-slate-100/40 dark:bg-black/40 border-b border-slate-200/60 dark:border-white/5 flex items-center justify-between text-xs text-slate-400 font-mono">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span class="ml-1 text-slate-400 text-[11px]">Output (stdout)</span>
+          </div>
+        </div>
+        <div id="terminalOutput" class="flex-1 p-3.5 font-mono text-xs text-slate-700 dark:text-slate-200 overflow-y-auto leading-relaxed">
+          <span class="text-slate-500">等待执行... 点击【运行代码】或按 Ctrl+Enter 查看实时结果。</span>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- Command Palette 弹窗 (Ctrl + K) -->
+  <div id="commandPaletteModal" class="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-black/40 backdrop-blur-md hidden">
+    <div class="bg-white/55 dark:bg-[#0b1020]/80 backdrop-blur-2xl border border-white/60 dark:border-white/10 rounded-2xl max-w-xl w-full shadow-2xl overflow-hidden">
+      <div class="p-3.5 border-b border-slate-200/60 dark:border-white/10 flex items-center gap-2.5">
+        <svg class="w-4 h-4 text-sky-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input type="text"
+               id="paletteSearchInput"
+               placeholder="输入关键词跳转章节、知识点、代码挑战..."
+               class="w-full bg-transparent text-sm text-slate-900 dark:text-slate-100 outline-none" />
+        <span class="kbd-badge">ESC</span>
+      </div>
+      <div id="paletteResults" class="p-2 max-h-[60vh] overflow-y-auto space-y-1">
+        <!-- 动态渲染匹配结果 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 语法速查手册模态框 (CheatSheet Modal) -->
+  <div id="cheatsheetModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md hidden">
+    <div class="bg-[#0b1020]/95 backdrop-blur-2xl border border-white/20 rounded-2xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📖</span>
+          <h3 id="cheatsheetTitle" class="text-base font-extrabold text-white">Python 核心语法极速备忘录</h3>
+        </div>
+        <button onclick="toggleCheatSheet(false)" class="p-1.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition cursor-pointer">
+          ✕
+        </button>
+      </div>
+
+      <div id="cheatsheetBody" class="p-5 overflow-y-auto space-y-4 text-xs">
+        <div class="p-3.5 rounded-xl bg-slate-900/80 border border-white/10">
+          <h4 class="font-bold text-sky-400 mb-2">高频内置函数</h4>
+          <div class="grid grid-cols-2 gap-2 text-slate-100 font-mono">
+            <div><code>print(...)</code> 控制台输出</div>
+            <div><code>len(seq)</code> 序列长度</div>
+            <div><code>type(x)</code> 查看对象类型</div>
+            <div><code>range(start, stop)</code> 数值序列生成</div>
+            <div><code>sum(iter)</code> 快速总和求算</div>
+            <div><code>round(val, n)</code> 保留 n 位小数</div>
+            <div><code>max() / min()</code> 极值计算</div>
+            <div><code>sorted(iter)</code> 返回全新排好序的列表</div>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-900/80 border border-white/10">
+          <h4 class="font-bold text-amber-400 mb-2">字符串与切片魔法</h4>
+          <div class="grid grid-cols-2 gap-2 text-slate-100 font-mono">
+            <div><code>s[0]</code> 提取首个字符</div>
+            <div><code>s[-1]</code> 提取末尾字符</div>
+            <div><code>s[0:3]</code> 前 3 个字符（含头不含尾）</div>
+            <div><code>s[::-1]</code> 字符串一秒逆序倒装</div>
+            <div><code>s.strip()</code> 消除首尾空白</div>
+            <div><code>s.split(",")</code> 按逗号分割为列表</div>
+            <div><code>f"{var:.2f}"</code> f-string 浮点格式化</div>
+            <div><code>s.replace(a, b)</code> 替换子串</div>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-900/80 border border-white/10">
+          <h4 class="font-bold text-emerald-400 mb-2">列表与字典高频操作</h4>
+          <div class="grid grid-cols-2 gap-2 text-slate-100 font-mono">
+            <div><code>lst.append(x)</code> 追加元素到末尾</div>
+            <div><code>lst.pop()</code> 弹出末尾元素</div>
+            <div><code>dict.get(k, default)</code> 防崩安全查值</div>
+            <div><code>dict.items()</code> 遍历键值对</div>
+            <div><code>set(lst)</code> 列表一键去重</div>
+            <div><code>[x**2 for x in lst]</code> 优雅列表推导式</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-5 py-3 border-t border-white/10 bg-slate-900/60 flex justify-end">
+        <button id="cheatsheetCloseBtn" onclick="toggleCheatSheet(false)" class="px-5 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs shadow-md transition cursor-pointer active:scale-95">
+          我知道了
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 竖轨全局浮动提示 (避免任何容器滚动裁剪) -->
+  <div id="railFloatingTooltip" class="fixed pointer-events-none opacity-0 invisible transition-all duration-150 z-50 px-3 py-2 rounded-xl bg-slate-900/95 border border-slate-700/80 text-white text-xs shadow-2xl backdrop-blur-xl flex items-center gap-2.5 whitespace-nowrap"></div>
+
+  <!-- Toast 提示容器 -->
+  <div id="toast" class="fixed bottom-6 right-6 px-4 py-2.5 rounded-2xl shadow-2xl text-xs sm:text-sm font-bold z-50 transition-all duration-300 transform translate-y-12 opacity-0 pointer-events-none"></div>
+
+  <!-- 离线核心脚本 -->
+  <script src="js/skulpt.min.js"></script>
+  <script src="js/skulpt-stdlib.js"></script>
+  <script src="js/prism.min.js"></script>
+  <script src="js/prism-python.min.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/chapters.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor & IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary & cache files
+*.tmp
+*.temp
+*.log
+__pycache__/
+*.pyc
+
+# Diagnostic / Scratch files
+test_*.html
