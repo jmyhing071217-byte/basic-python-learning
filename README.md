@@ -1,106 +1,149 @@
-# 🐍 Python 零基础交互式速成教程 (Python QuickStart)
+# 🐍 Python Lab | Interactive Zero-to-Hero Tutorial
 
-一个专为编程初学者打造的现代化、高颜值、分步卡片式的沉浸式 Python 学习平台。
+A modern, immersive, step-by-step card-based Python learning platform designed for beginners and developers alike. Run Python directly inside your browser with zero installation, interact with real-time code sandboxes, take quizzes, and track your progress offline or online.
 
----
-
-## ✨ 核心升级亮点
-
-- 🎨 **融合 GitHub 顶级 UI 美学 Skill 规范（Anti-AI-Slop & Award-Winning Craft）**：
-  - **`anthropics/skills/frontend-design`**：拒绝模板化与千篇一律的 AI 设计，采用克制且有目的性的色彩阶元（Tokens）、微距字距（Tracking -0.015em）与光学对齐，卡片顶部加入精细镜面高光（Specular Rim `inset 0 1px 0 rgba(255,255,255,0.14)`）。
-  - **`nextlevelbuilder/ui-ux-pro-max-skill`**：深度通透毛玻璃（Glassmorphism Pro）与 4 层动态浮动极光光晕（Chromatic Aurora Mesh），代码块采用 Tokyo Night Pro 定制高反差语法高亮。
-  - **`apple-design-skill`**：iOS/macOS 风格悬浮玻璃 Dock、分段式步骤胶囊控制器（Segmented Control Pills）、弹性物理缓动（Spring Physics `cubic-bezier(0.16, 1, 0.3, 1)`）以及点击即时触觉级视觉反馈。
-- 💎 **高阶设计系统（7 大看板级现代交互模式）**：
-  1. **全透明通透顶栏**：菜单融入极光流光，毛玻璃饱和度增强，告别厚重死板顶栏。
-  2. **右侧悬浮竖轨 Dock**：导航置于页面右侧微距悬浮毛玻璃 Dock，左侧与中央全留给核心教程与代码沙盒。
-  3. **当前项展开数字与标识**：竖轨默认展示清晰两位数字徽标，当前选中项高亮为饱满胶囊卡片并带微动效呼吸光晕。
-  4. **图标配大标题**：左上角展示当前关卡高对比度醒目大标题、分类路径与徽章。
-  5. **悬停气泡提示**：鼠标悬停在竖轨任意数字徽标上，向左浮现高斯模糊气泡提示（关卡序号、全名、分类与步数）。
-  6. **侧边快捷操作**：竖轨顶部集成【⚡运行代码】、【💻显隐演练场】、【🔍全局搜索】、【📖速查宝典】与【🌓主题切换】等高频操作。
-  7. **全景透明极光体系与动态微光**：告别单一灰黑配色，引入多层动态飘移极光（Sky、Purple、Emerald、Amber、Rose、Gold）与科技感网格纹理，全站卡片皆采用高通透毛玻璃呈现！
-- 💻 **可自由隐藏/收起的代码演练场 (Hideable IDE Playground)**：
-  - **沉浸专注阅读**：点击顶栏【💻 隐藏演练场】、竖轨快捷按钮或右上方【✕】按钮，即可完全收起右侧代码界面，教程卡片瞬间自适应扩展至宽屏视野（`max-w-5xl`），尽情阅读无干扰。
-  - **随心极速呼出**：随时按下快捷键 **`Ctrl + J`**（或点击顶栏/竖轨按钮）秒级重新唤出代码演练场。
-  - **智能自动展开**：在阅读过程中点击教程内的任意【▶ 填入演练场并运行】或顶部【运行代码】，系统将**自动智能展开演练场**并展示执行结果，无需手动切换！
-- 🧩 **分步卡片学习流（告别信息过载）**：
-  - 严格遵循**“一页只讲一件事”**的设计原则，每章划分为 3~5 个精简独立小步骤（概念透析 → 语法实操 → 避坑指南 → 动手挑战 → 随堂自测）。
-  - 配备顶部药丸步骤条（Step Pills）与平滑翻步导航，学习像闯关一样轻松，拒绝冗长滚屏压力。
-- 🗂️ **按需呼出式章节抽屉（不常驻霸屏）**：
-  - 侧边栏默认隐藏不占屏幕宽度，释放绝佳的居中阅读视野与演练场空间。
-  - 支持 **顶栏【章节大纲】**、**左边缘吸附触钮**、快捷键 **`Ctrl + B`** 或 **`Ctrl + K`** 秒级唤出/收起，选完章节自动隐藏。
-- 📖 **核心语法速查宝典 (CheatSheet)**：
-  - 顶部导航一键唤出高频内置函数、切片公式、容器方法极速备忘录。
-- 🚀 **浏览器内直接运行 Python**：
-  - 内置纯前端 Python 执行引擎，无需在电脑上配置复杂环境，点击即可实时运行代码、捕获标准输出（stdout）与错误回溯（traceback）。
-  - 支持交互式 `input()` 终端提示输入。
-- ⌨️ **沉浸式代码演练场 (Sandbox)**：
-  - 实时行号对齐与同步滚动。
-  - 支持 `Tab` 键快速缩进（4 个空格）、回车智能继承并追加缩进。
-  - 快捷键 `Ctrl + Enter` (或 `Cmd + Enter`) 极速执行。
-  - 预设经典代码模板库（九九乘法表、斐波那契数列、密码检测器、质数筛选器等）。
-- 📝 **互动随堂小测验 (Quiz)**：
-  - 单选自测题，点击选项即时获得正确/错误反馈与深度解析。
-- 📊 **学习进度本地持久化**：
-  - 章节打卡与总进度条追踪，自动保存至浏览器 `localStorage`，刷新不丢失。
-- 🌓 **暗黑 / 明亮主题自由切换**：
-  - 精心调配的夜间深色终端美学与清爽日间模式。
-- 📦 **100% 离线可用**：
-  - 所有核心脚本均已本地化存放，无网络环境下依然流畅运行！
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Language: Python 3.x](https://img.shields.io/badge/Language-Python%203.x-yellow.svg)](https://www.python.org/)
+[![Runtime: Browser / Skulpt](https://img.shields.io/badge/Runtime-In--Browser%20Skulpt-success.svg)](https://skulpt.org/)
+[![UI: Tailwind & Glassmorphism](https://img.shields.io/badge/UI-Tailwind%20%26%20Glassmorphism-38bdf8.svg)](https://tailwindcss.com/)
+[![Bilingual: EN / 中文](https://img.shields.io/badge/i18n-English%20%7C%20%E4%B8%AD%E6%96%87-purple.svg)](#-internationalization--bilingual-support)
 
 ---
 
-## 📚 15 大核心关卡目录
+## ✨ Key Features & Highlights
 
-| 章节编号 | 章节名称 | 核心知识点与特色 |
-| :--- | :--- | :--- |
-| **01** | 初识 Python 与第一行代码 | Python 哲学、print 语法图解、注释与新手避坑 |
-| **02** | 变量与四大核心数据类型 | 变量本质、int / float / str / bool、类型转换 |
-| **03** | 算术运算符与常用计算 | 整除 // 与取余 %、幂运算、运算符优先级 |
-| **04** | 玩转字符串与现代 f-string | 索引切片 [start:end:step]、文本清洗、现代 f-string |
-| **05** | 条件分支与逻辑判断 | 比较与逻辑运算、缩进灵魂、单行三元表达式 |
-| **06** | 循环控制：for 与 while | range 计数器、while 死循环防范、break 与 continue 刹车机制 |
-| **07** | 核心序列：列表 (List) | 列表创建、0 索引、增删改查 (append/pop/remove)、排序 |
-| **08** | 列表推导式与高级迭代 | 极简一行生成列表、enumerate 带序号遍历、zip 并行打包 |
-| **09** | 元组 (Tuple) 与 集合 (Set) | 元组不可变安全特性、解包赋值、集合天然去重与数学运算 |
-| **10** | 字典 (Dict)：键值对映射 | 键值映射、.get() 防崩安全取值、items() 遍历 |
-| **11** | 函数入门 (def) 与模块化 | 函数封装复用、形参与实参、return 多返回值解构 |
-| **12** | 函数进阶：参数艺术与匿名函数 | 默认参数机制、*args 与 **kwargs、匿名函数 lambda、高阶排序 |
-| **13** | 异常捕获与防御性编程 | try-except-else-finally 结构、捕获指定异常、防闪退 |
-| **14** | 面向对象编程 (OOP) 初体验 | 蓝图与实例形象比喻、class 定义、__init__ 构造函数、self 的含义 |
-| **15** | 综合实战案例通关项目 | 密码强度综合检测器、班级成绩综合数据分析、结业通关荣耀 |
+- 🌐 **Internationalization & Bilingual Support**:
+  - Full, seamless one-click switching between **English** and **Simplified Chinese** (`EN / 中文`).
+  - All 15 chapters, quizzes, hints, code explanations, syntax cheat sheet, and IDE tooltips are fully localized.
+
+- 🎨 **Award-Winning UI Craft & Aesthetic System**:
+  - **Dynamic Particle Nebula Background**: Smooth ambient video backdrop with chromatic glowing grids and particle flow.
+  - **Glassmorphism Pro**: High-contrast, translucent frosted glass cards with specular rim lighting (`inset 0 1px 0 rgba(255,255,255,0.14)`).
+  - **Floating Glass Dock**: iOS/macOS-inspired vertical right dock for rapid navigation, code execution, search, and language switching.
+  - **Spring Physics**: Organic, responsive transitions with custom cubic-bezier curves and interactive shockwave ripple effects.
+
+- 🧩 **Focused Step-by-Step Card Flow ("One Idea Per Page")**:
+  - Each chapter is divided into bite-sized, digestible steps: *Core Concept → Syntax Practice → Common Pitfalls → Coding Challenge → Quiz*.
+  - **Stacked Card Mode**: Focus on one concept at a time with smooth segmented pill navigation.
+  - **Panoramic Cascade Mode**: Click "Expand All" (`展开全景`) to inspect all steps simultaneously.
+
+- 🚀 **100% Client-Side In-Browser Python Engine**:
+  - Powered by **Skulpt JIT**, executing Python code purely within the browser.
+  - No Python runtime, local compiler, server, or backend setup required.
+  - Full support for standard output (`stdout`), interactive user input (`input()`), and detailed syntax/runtime error tracebacks.
+
+- 💻 **Collapsible IDE Sandbox**:
+  - Live code editor with automatic indentation, `Tab` support (4 spaces), and bracket matching.
+  - Real-time line numbering and synchronized scrolling.
+  - Quick keyboard shortcut: **`Ctrl + Enter`** to run code, **`Ctrl + J`** to toggle/hide the playground.
+  - Preset library of classic algorithmic templates (Multiplication table, Fibonacci series, Password validator, Prime sieve, etc.).
+
+- 📝 **Interactive Quizzes & Instant Feedback**:
+  - Single-choice self-assessments with instant explanations, answer analysis, and visual celebration confetti upon chapter completion.
+
+- 📖 **Built-in Syntax Cheat Sheet & Spotlight Search**:
+  - Press **`Ctrl + K`** to trigger the global command palette and search syntax keywords instantly.
+  - Integrated quick-reference manual for built-in functions, slicing formulas, and container methods.
+
+- 📊 **Local Progress Persistence**:
+  - Automatic local storage synchronization (`localStorage`) preserves your completed chapters and step states without needing an account.
+
+- 📦 **100% Offline Capable**:
+  - All core dependencies (Prism, Tailwind, Skulpt, fonts, video assets) are bundled locally. Runs smoothly with zero internet connection.
 
 ---
 
-## 🚀 启动与使用方式
+## 📚 Curriculum (15 Core Chapters)
 
-### 方式一：双击直接打开（最简单）
-- 双击目录下的 `start.bat`；
-- 或者直接用任意浏览器（Edge、Chrome、Firefox 等）双击打开 `index.html` 即可！
+| # | Chapter Title | Core Topics Covered |
+| :---: | :--- | :--- |
+| **01** | First Steps & First Line of Code | The Zen of Python, `print()` syntax, comments, and beginner pitfalls |
+| **02** | Variables & The Four Primitive Types | Variable concepts, `int` / `float` / `str` / `bool`, and explicit type casting |
+| **03** | Arithmetic Operators & Calculations | Floor division `//`, modulo `%`, power `**`, and operator precedence |
+| **04** | String Manipulation & Modern f-strings | Slice indexing `[start:end:step]`, string cleaning methods, formatted strings |
+| **05** | Conditional Branching & Logic | Comparison operators, Boolean logic (`and`/`or`/`not`), indentation rules, ternary expressions |
+| **06** | Loop Control: `for` and `while` | `range()` generators, loop safety, `break` and `continue` control flow |
+| **07** | Essential Sequences: Lists (`list`) | Zero-based indexing, mutation (`append`, `pop`, `remove`), slicing, and sorting |
+| **08** | List Comprehensions & Advanced Iteration | One-line comprehensions, indexed loops with `enumerate()`, pairing with `zip()` |
+| **09** | Tuples (`tuple`) & Sets (`set`) | Tuple immutability, multiple assignment unpacking, set deduplication & math operations |
+| **10** | Dictionaries (`dict`): Key-Value Mappings | Key-value lookups, safe fetching with `.get()`, and `.items()` traversal |
+| **11** | Function Fundamentals (`def`) | Modularity, arguments vs. parameters, multi-value `return` unpacking |
+| **12** | Advanced Functions & Lambdas | Default parameters, `*args` and `**kwargs`, anonymous `lambda` expressions |
+| **13** | Exception Handling & Defensive Coding | `try-except-else-finally` blocks, catching specific errors, crash prevention |
+| **14** | Object-Oriented Programming (OOP) | Classes and blueprints, `__init__` constructor, instance methods, and `self` |
+| **15** | Comprehensive Capstone Project | Password strength analyzer, grade statistics engine, and graduation honors |
 
-### 方式二：本地 HTTP 服务（可选）
-如果您希望通过本地服务器访问，可以在当前目录下打开终端运行：
+---
+
+## 🚀 Getting Started
+
+### Method 1: Double-Click (Zero Setup)
+1. Double-click `start.bat` on Windows;
+2. Or simply open `index.html` in any modern web browser (Chrome, Edge, Firefox, Safari).
+
+### Method 2: Local HTTP Server (Optional)
+If you prefer serving the files through a local server:
 ```bash
+# Python 3
 python -m http.server 8000
 ```
-然后在浏览器中访问 [http://localhost:8000](http://localhost:8000)。
+Then navigate to [http://localhost:8000](http://localhost:8000) in your browser.
 
 ---
 
-## 🛠️ 文件目录结构
+## 🌐 Deploy to GitHub Pages (Free Hosting)
+
+You can host this project online for free with GitHub Pages:
+
+1. Push this repository to GitHub;
+2. Go to your repository **Settings** → **Pages**;
+3. Under **Build and deployment > Branch**, select `main` branch and `/ (root)` folder;
+4. Click **Save**;
+5. In 1–2 minutes, your live site will be ready at:
+   `https://<your-username>.github.io/<your-repo-name>/`
+
+---
+
+## 🗂️ Project Structure
 
 ```text
-antigravity test1/
-├── index.html            # 主学习页面（卡片式分步学习）
-├── start.bat             # Windows 一键启动脚本
-├── README.md             # 说明文档
+basic-python-learning/
+├── index.html            # Main single-page interactive app
+├── start.bat             # One-click Windows launcher
+├── push_to_github.bat    # One-click GitHub push utility
+├── README.md             # Project documentation (English)
+├── .gitignore            # Git exclusion rules
 ├── css/
-│   ├── prism.min.css     # 代码高亮样式
-│   └── style.css         # 现代美学样式表与动效
+│   ├── prism.min.css     # Syntax highlighting styles
+│   └── style.css         # Custom animations, glassmorphism, responsive layout
+├── images/
+│   ├── background_video.mp4  # Dynamic ambient video background
+│   ├── video_frame_0.jpg     # Video poster frame
+│   └── video_frame_mid.jpg   # High-resolution fallback backdrop
 └── js/
-    ├── app.js            # 主程序交互、分步控制器、沙盒执行
-    ├── chapters.js       # 15大章节分步题库与教程
-    ├── skulpt.min.js     # 浏览器端纯前端 Python 解释引擎
-    ├── skulpt-stdlib.js  # Python 标准库模块
-    ├── tailwind.js       # 现代 UI 样式运行时
-    └── prism*.js         # Python 语法高亮引擎
+    ├── app.js            # Core interactive logic, UI controller, Skulpt runner
+    ├── chapters.js       # 15 chapters content, steps, code snippets, and quizzes
+    ├── i18n.js           # Bilingual dictionary & dynamic translation engine
+    ├── skulpt.min.js     # In-browser Python compiler/runtime
+    ├── skulpt-stdlib.js  # Python standard library modules
+    ├── tailwind.js       # Tailwind CSS runtime engine
+    └── prism*.js         # Prism syntax highlighter
 ```
+
+---
+
+## ⌨️ Useful Keyboard Shortcuts
+
+| Shortcut | Action |
+| :--- | :--- |
+| **`Ctrl + Enter`** | Run Python code in Playground |
+| **`Ctrl + J`** | Toggle / Show / Hide Playground |
+| **`Ctrl + B`** | Open / Close Chapter Outline Sidebar |
+| **`Ctrl + K`** | Open Spotlight Command Palette |
+| **`ESC`** | Close open modal, sidebar, or dialog |
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and share it for educational and personal purposes!
