@@ -1455,7 +1455,7 @@ function runPythonCode() {
   }
 
   AppState.isRunning = true;
-  if (statusEl) statusEl.innerHTML = `<span class="text-amber-400 font-semibold font-mono">⚡ Running...</span>`;
+  if (statusEl) statusEl.innerHTML = `<span class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 font-mono text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>${AppState.lang === "en" ? "Running..." : "运行中..."}</span>`;
   if (runBtn) {
     runBtn.disabled = true;
     runBtn.classList.add("opacity-70", "cursor-not-allowed");
@@ -1491,7 +1491,7 @@ function runPythonCode() {
     function () {
       const elapsed = Math.round(performance.now() - startTime);
       if (statusEl) {
-        statusEl.innerHTML = `<span class="text-emerald-400 font-bold font-mono">✓ Done (${elapsed}ms)</span>`;
+        statusEl.innerHTML = `<span class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>${AppState.lang === "en" ? "Done" : "完成"} (${elapsed}ms)</span>`;
       }
       AppState.isRunning = false;
       if (runBtn) {
@@ -1506,7 +1506,7 @@ function runPythonCode() {
       term.scrollTop = term.scrollHeight;
 
       if (statusEl) {
-        statusEl.innerHTML = `<span class="text-rose-400 font-bold font-mono">✗ Error (${elapsed}ms)</span>`;
+        statusEl.innerHTML = `<span class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 font-mono text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>${AppState.lang === "en" ? "Error" : "异常"} (${elapsed}ms)</span>`;
       }
       AppState.isRunning = false;
       if (runBtn) {
@@ -2062,7 +2062,7 @@ function applyI18n() {
   if (runBtnSpan) runBtnSpan.textContent = t("run_btn_text");
 
   const runStatus = document.getElementById("runStatus");
-  if (runStatus && !AppState.isRunning) runStatus.innerHTML = `<span class="text-slate-400">${t("run_status_ready")}</span>`;
+  if (runStatus && !AppState.isRunning) runStatus.innerHTML = `<span class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-mono text-[11px]"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>${t("run_status_ready")}</span>`;
 
   const clearTerminalBtn = document.querySelector("button[onclick='clearTerminal()']");
   if (clearTerminalBtn) clearTerminalBtn.textContent = t("clear_terminal_btn");
