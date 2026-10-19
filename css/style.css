@@ -14,16 +14,22 @@
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* Glass Surface Tokens - Dark Mode */
-  --glass-dark-base: rgba(8, 14, 28, 0.68);
-  --glass-dark-border: rgba(255, 255, 255, 0.12);
-  --glass-dark-specular: inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
-  --glass-dark-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --glass-dark-base: rgba(14, 23, 20, 0.82);
+  --glass-dark-border: rgba(62, 207, 142, 0.16);
+  --glass-dark-specular: inset 0 1px 0 0 rgba(62, 207, 142, 0.22);
+  --glass-dark-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(62, 207, 142, 0.1);
 
   /* Glass Surface Tokens - Light Mode */
-  --glass-light-base: rgba(13, 20, 38, 0.62);
-  --glass-light-border: rgba(56, 189, 248, 0.25);
-  --glass-light-specular: inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
-  --glass-light-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(56, 189, 248, 0.15);
+  --glass-light-base: rgba(14, 23, 20, 0.82);
+  --glass-light-border: rgba(62, 207, 142, 0.22);
+  --glass-light-specular: inset 0 1px 0 0 rgba(62, 207, 142, 0.2);
+  --glass-light-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(62, 207, 142, 0.15);
+
+  /* Supabase Cyber Emerald Tokens */
+  --color-supabase-emerald: #3ecf8e;
+  --color-supabase-deep: #24b47e;
+  --color-supabase-canvas: #0c1311;
+  --color-supabase-surface: #121a18;
 }
 
 /* Base Typography & Antialiasing */
@@ -38,11 +44,11 @@ body {
   letter-spacing: -0.012em;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
   color: #f8fafc !important;
-  caret-color: #38bdf8;
+  caret-color: #3ecf8e;
 }
 
 ::selection {
-  background: rgba(14, 165, 233, 0.35) !important;
+  background: rgba(62, 207, 142, 0.35) !important;
   color: #ffffff !important;
 }
 
@@ -99,16 +105,16 @@ html:not(.dark) .text-slate-400 {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.65) !important;
 }
 
-/* 4. 行内代码标记 (Inline Code Badges)：亮青微光胶囊，醒目出彩 */
+/* 4. 行内代码标记 (Inline Code Badges)：Supabase 翡翠绿微光胶囊，醒目出彩 */
 code:not([class*="language-"]) {
-  background: rgba(14, 165, 233, 0.22) !important;
-  color: #38bdf8 !important;
+  background: rgba(62, 207, 142, 0.14) !important;
+  color: #3ecf8e !important;
   padding: 0.18rem 0.48rem !important;
   border-radius: 0.45rem !important;
   font-weight: 700 !important;
-  border: 1px solid rgba(56, 189, 248, 0.45) !important;
+  border: 1px solid rgba(62, 207, 142, 0.3) !important;
   font-size: 0.9em !important;
-  text-shadow: 0 0 8px rgba(56, 189, 248, 0.5) !important;
+  text-shadow: 0 0 8px rgba(62, 207, 142, 0.4) !important;
 }
 
 /* 5. 重点与强调 (Strong / Bold) */
@@ -151,233 +157,49 @@ code, pre, .font-mono, #codeEditor, #terminalOutput, input.font-mono {
   transition: background 0.2s;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.48);
+  background: rgba(62, 207, 142, 0.5);
 }
 
 /* ==========================================================================
-   1. 丰富多层极光环境氛围微光 (Rich Chromatic Aurora Mesh & Floats)
+   1. Supabase 科技翡翠绿环境底色与几何微网格 (Cyber Emerald Ambient Grid & Glow)
    ========================================================================== */
-/* ==========================================================================
-   动态微粒星云背景视频 (Dynamic Particle Nebula Video Background)
-   ========================================================================== */
-.video-bg-container {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.background-video {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  transition: opacity 0.5s var(--ease-spring), filter 0.5s var(--ease-spring);
-}
-
-/* 暗色模式：微粒高光透亮，深蓝青星云深邃优雅 */
-.dark .background-video {
-  opacity: 0.76;
-  filter: saturate(135%) contrast(110%) brightness(100%);
-}
-
-/* 亮色模式：通透柔和流光，微粒清晰可见 */
-html:not(.dark) .background-video,
-.light .background-video {
-  opacity: 0.78;
-  filter: saturate(125%) contrast(105%) brightness(102%);
-}
-
-/* 微光渐变遮罩 (确保前景卡片与代码字迹 100% 锐利可读，同时绝不遮挡视频微粒) */
-.video-overlay-scrim {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.dark .video-overlay-scrim {
-  background: radial-gradient(circle at 50% 40%, rgba(4, 7, 17, 0.42) 0%, rgba(4, 7, 17, 0.75) 75%, rgba(4, 7, 17, 0.92) 100%);
-}
-
-html:not(.dark) .video-overlay-scrim,
-.light .video-overlay-scrim {
-  background: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.08) 0%, rgba(241, 245, 249, 0.22) 60%, rgba(241, 245, 249, 0.42) 100%);
-}
-
-/* 沉浸视频模式 (可切换) */
-body.video-vivid .background-video {
-  opacity: 0.96 !important;
-}
-
-/* 极简柔和视频模式 (可切换) */
-body.video-soft .background-video {
-  opacity: 0.28 !important;
-}
-
-@keyframes auroraFloat1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(65px, 40px) scale(1.15); }
-}
-
-@keyframes auroraFloat2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-60px, -45px) scale(1.1); }
-}
-
-@keyframes auroraFloat3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(50px, -35px) scale(1.12); }
-}
-
-@keyframes auroraFloat4 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-40px, 30px) scale(1.08); }
-}
-
-.aurora-grid {
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(circle at 50% 35%, black 45%, transparent 92%);
-  -webkit-mask-image: radial-gradient(circle at 50% 35%, black 45%, transparent 92%);
-  pointer-events: none;
-}
-
-.light .aurora-grid,
-html:not(.dark) .aurora-grid {
-  background-image: linear-gradient(rgba(100, 116, 139, 0.04) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(100, 116, 139, 0.04) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-/* 全景通透画布：body 保持 100% 透明，完全透出底层高质感星云视频 */
 body {
-  background: transparent !important;
+  background-color: #0c1311 !important;
+  background-image: 
+    radial-gradient(circle at 50% -10%, rgba(62, 207, 142, 0.16) 0%, rgba(16, 185, 129, 0.05) 45%, transparent 75%),
+    radial-gradient(circle at 12% 85%, rgba(16, 185, 129, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 88% 90%, rgba(62, 207, 142, 0.07) 0%, transparent 50%),
+    linear-gradient(rgba(62, 207, 142, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62, 207, 142, 0.035) 1px, transparent 1px) !important;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px !important;
+  background-attachment: fixed !important;
 }
+
 html:not(.dark) body,
 .light body {
-  background: transparent !important;
-}
-
-/* 暗色模式极光团 (Chromatic Mesh) */
-.dark .aurora-1 {
-  position: absolute;
-  width: 800px;
-  height: 800px;
-  top: -160px;
-  left: 5%;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(99, 102, 241, 0.16) 45%, transparent 70%);
-  filter: blur(120px);
-  animation: auroraFloat1 22s ease-in-out infinite;
-}
-
-.dark .aurora-2 {
-  position: absolute;
-  width: 720px;
-  height: 720px;
-  top: 20%;
-  right: 8%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.22) 0%, rgba(236, 72, 153, 0.15) 50%, transparent 70%);
-  filter: blur(130px);
-  animation: auroraFloat2 26s ease-in-out infinite;
-}
-
-.dark .aurora-3 {
-  position: absolute;
-  width: 680px;
-  height: 680px;
-  bottom: -80px;
-  left: 24%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, rgba(56, 189, 248, 0.12) 50%, transparent 70%);
-  filter: blur(130px);
-  animation: auroraFloat3 30s ease-in-out infinite;
-}
-
-.dark .aurora-4 {
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  bottom: 25%;
-  right: 25%;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.16) 0%, rgba(244, 63, 94, 0.1) 50%, transparent 70%);
-  filter: blur(140px);
-  animation: auroraFloat4 28s ease-in-out infinite;
-}
-
-/* 亮色模式极光团 (丰富柔和极光光晕，拒绝灰白平淡) */
-.light .aurora-1 {
-  position: absolute;
-  width: 780px;
-  height: 780px;
-  top: -120px;
-  left: 6%;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.32) 0%, rgba(99, 102, 241, 0.18) 50%, transparent 70%);
-  filter: blur(100px);
-  animation: auroraFloat1 20s ease-in-out infinite;
-}
-
-.light .aurora-2 {
-  position: absolute;
-  width: 720px;
-  height: 720px;
-  top: 15%;
-  right: 5%;
-  background: radial-gradient(circle, rgba(244, 114, 182, 0.28) 0%, rgba(192, 132, 252, 0.18) 50%, transparent 70%);
-  filter: blur(110px);
-  animation: auroraFloat2 24s ease-in-out infinite;
-}
-
-.light .aurora-3 {
-  position: absolute;
-  width: 680px;
-  height: 680px;
-  bottom: -60px;
-  left: 18%;
-  background: radial-gradient(circle, rgba(52, 211, 153, 0.26) 0%, rgba(56, 189, 248, 0.15) 50%, transparent 70%);
-  filter: blur(120px);
-  animation: auroraFloat3 28s ease-in-out infinite;
-}
-
-.light .aurora-4 {
-  position: absolute;
-  width: 620px;
-  height: 620px;
-  bottom: 20%;
-  right: 20%;
-  background: radial-gradient(circle, rgba(251, 191, 36, 0.24) 0%, rgba(244, 114, 182, 0.14) 50%, transparent 70%);
-  filter: blur(120px);
-  animation: auroraFloat4 26s ease-in-out infinite;
+  background-color: #0c1311 !important;
+  background-image: 
+    radial-gradient(circle at 50% -10%, rgba(62, 207, 142, 0.16) 0%, rgba(16, 185, 129, 0.05) 45%, transparent 75%),
+    radial-gradient(circle at 12% 85%, rgba(16, 185, 129, 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 88% 90%, rgba(62, 207, 142, 0.07) 0%, transparent 50%),
+    linear-gradient(rgba(62, 207, 142, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62, 207, 142, 0.035) 1px, transparent 1px) !important;
+  background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px !important;
+  background-attachment: fixed !important;
 }
 
 /* ==========================================================================
    2. 顶栏：超质感通透毛玻璃 (Transparent Header)
    ========================================================================== */
-.transparent-header {
-  background: rgba(5, 9, 20, 0.52);
-  backdrop-filter: blur(28px) saturate(190%);
-  -webkit-backdrop-filter: blur(28px) saturate(190%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.25);
-  transition: all 0.25s var(--ease-spring);
-}
+.transparent-header,
 html:not(.dark) .transparent-header,
 .light .transparent-header {
-  background: rgba(8, 14, 28, 0.55);
+  background: rgba(12, 19, 17, 0.82);
   backdrop-filter: blur(28px) saturate(190%);
   -webkit-backdrop-filter: blur(28px) saturate(190%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(62, 207, 142, 0.16);
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.45);
+  transition: all 0.25s var(--ease-spring);
 }
 
 /* ==========================================================================
@@ -391,7 +213,11 @@ html:not(.dark) .transparent-header,
 }
 
 .dark .glass-surface,
-.dark .chromatic-card {
+.dark .chromatic-card,
+html:not(.dark) .glass-surface,
+html:not(.dark) .chromatic-card,
+.light .glass-surface,
+.light .chromatic-card {
   background: var(--glass-dark-base);
   backdrop-filter: blur(28px) saturate(190%);
   -webkit-backdrop-filter: blur(28px) saturate(190%);
@@ -399,30 +225,7 @@ html:not(.dark) .transparent-header,
   box-shadow: var(--glass-dark-shadow), var(--glass-dark-specular);
 }
 
-.dark .glass-surface::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 8%;
-  right: 8%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.6), rgba(168, 85, 247, 0.5), transparent);
-  pointer-events: none;
-  border-radius: 9999px;
-}
-
-/* 亮色模式高透液态毛玻璃卡片 (Apple VisionOS / Fluent Mica Glass - 绝不死白) */
-html:not(.dark) .glass-surface,
-html:not(.dark) .chromatic-card,
-.light .glass-surface,
-.light .chromatic-card {
-  background: var(--glass-light-base);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid var(--glass-light-border);
-  box-shadow: var(--glass-light-shadow), inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
-}
-
+.dark .glass-surface::before,
 html:not(.dark) .glass-surface::before,
 .light .glass-surface::before {
   content: '';
@@ -430,8 +233,8 @@ html:not(.dark) .glass-surface::before,
   top: 0;
   left: 8%;
   right: 8%;
-  height: 1.5px;
-  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.6), rgba(168, 85, 247, 0.5), rgba(251, 191, 36, 0.5), transparent);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(62, 207, 142, 0.7), rgba(16, 185, 129, 0.5), transparent);
   pointer-events: none;
   border-radius: 9999px;
 }
@@ -502,26 +305,19 @@ html:not(.dark) [class*="bg-emerald-50"]:hover,
 }
 
 /* 演练场高透磨砂面板 (Playground IDE Panel) */
-.dark .playground-panel {
-  background: rgba(6, 10, 22, 0.62);
-  backdrop-filter: blur(32px) saturate(190%);
-  -webkit-backdrop-filter: blur(32px);
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: -15px 0 45px -10px rgba(0, 0, 0, 0.5), inset 1px 0 0 0 rgba(255, 255, 255, 0.05);
-}
-
+.dark .playground-panel,
 html:not(.dark) .playground-panel,
 .light .playground-panel {
-  background: rgba(7, 12, 26, 0.68);
+  background: rgba(12, 19, 17, 0.86);
   backdrop-filter: blur(32px) saturate(190%);
   -webkit-backdrop-filter: blur(32px);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: -15px 0 45px -10px rgba(0, 0, 0, 0.5);
+  border-left: 1px solid rgba(62, 207, 142, 0.16);
+  box-shadow: -15px 0 45px -10px rgba(0, 0, 0, 0.6), inset 1px 0 0 0 rgba(62, 207, 142, 0.08);
 }
 
 /* 绚烂流光标题文字 (Gradient Text) */
 .gradient-text-hero {
-  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 35%, #c084fc 65%, #f472b6 100%);
+  background: linear-gradient(135deg, #3ecf8e 0%, #10b981 40%, #34d399 75%, #6ee7b7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 900;
@@ -531,18 +327,20 @@ html:not(.dark) .playground-panel,
 /* ==========================================================================
    4. 右侧悬浮玻璃竖轨菜单 (Floating Glass Navigation Dock)
    ========================================================================== */
-.right-vertical-rail {
+.right-vertical-rail,
+html:not(.dark) .right-vertical-rail,
+.light .right-vertical-rail {
   position: fixed;
   top: 10px;
   bottom: 10px;
   right: 8px;
   width: 66px;
   border-radius: 24px;
-  background: rgba(7, 12, 25, 0.65);
+  background: rgba(14, 23, 20, 0.85);
   backdrop-filter: blur(30px) saturate(200%);
   -webkit-backdrop-filter: blur(30px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: 0 16px 45px -10px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(62, 207, 142, 0.18);
+  box-shadow: 0 16px 45px -10px rgba(0, 0, 0, 0.65), inset 0 1px 0 0 rgba(62, 207, 142, 0.2);
   z-index: 45;
   display: flex;
   flex-direction: column;
@@ -553,19 +351,12 @@ html:not(.dark) .playground-panel,
 }
 
 @media (min-width: 640px) {
-  .right-vertical-rail {
+  .right-vertical-rail,
+  html:not(.dark) .right-vertical-rail,
+  .light .right-vertical-rail {
     right: 12px;
     width: 72px;
   }
-}
-
-html:not(.dark) .right-vertical-rail,
-.light .right-vertical-rail {
-  background: rgba(8, 14, 28, 0.65);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 16px 35px -10px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
 }
 
 /* 数字按钮样式 (明确表示第几章节) */
@@ -583,9 +374,9 @@ html:not(.dark) .right-vertical-rail,
 
 /* 当前项展开文字带平滑微动效 (Active Expanded Card) */
 .rail-num-btn.active-expanded {
-  box-shadow: 0 10px 28px -4px rgba(14, 165, 233, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
+  box-shadow: 0 10px 28px -4px rgba(62, 207, 142, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.35);
   transform: scale(1.02);
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(62, 207, 142, 0.4) !important;
 }
 .rail-num-btn.active-expanded:hover {
   transform: scale(1.04);
@@ -593,14 +384,14 @@ html:not(.dark) .right-vertical-rail,
 
 /* 分类色彩主题映射 (6 大主题微光按钮体系) */
 .theme-cyan-btn {
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.08);
-  border: 1px solid rgba(56, 189, 248, 0.24);
+  color: #3ecf8e;
+  background: rgba(62, 207, 142, 0.08);
+  border: 1px solid rgba(62, 207, 142, 0.24);
 }
 .theme-cyan-btn:hover {
-  background: rgba(56, 189, 248, 0.22);
-  border-color: rgba(56, 189, 248, 0.6);
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+  background: rgba(62, 207, 142, 0.22);
+  border-color: rgba(62, 207, 142, 0.6);
+  box-shadow: 0 0 16px rgba(62, 207, 142, 0.35);
 }
 
 .theme-purple-btn {
@@ -695,20 +486,14 @@ html:not(.dark) .right-vertical-rail,
 /* ==========================================================================
    5. 步骤药丸导航条 (macOS/iOS Segmented Control Pills)
    ========================================================================== */
-.step-segmented-track {
-  background: rgba(8, 13, 26, 0.48);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
+.step-segmented-track,
 html:not(.dark) .step-segmented-track,
 .light .step-segmented-track {
-  background: rgba(8, 14, 28, 0.55);
+  background: rgba(14, 23, 20, 0.72);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(62, 207, 142, 0.16);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(62, 207, 142, 0.1);
 }
 
 .step-nav-pill {
@@ -717,16 +502,18 @@ html:not(.dark) .step-segmented-track,
   border: 1px solid transparent;
 }
 .step-nav-pill:not(.active):hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(62, 207, 142, 0.1);
+  color: #3ecf8e;
   transform: translateY(-1px);
 }
 html:not(.dark) .step-nav-pill:not(.active):hover,
 .light .step-nav-pill:not(.active):hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(62, 207, 142, 0.12);
+  color: #3ecf8e;
 }
 .step-nav-pill.active {
-  box-shadow: 0 8px 22px -4px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 22px -4px rgba(62, 207, 142, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  border-color: rgba(62, 207, 142, 0.4);
   transform: translateY(-1px);
 }
 .step-nav-pill:active {
